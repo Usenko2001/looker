@@ -1,0 +1,115 @@
+@font-face {
+    font-family: 'Furore';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Furore'), url('Furore.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Stem';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Stem'), url('Stem.woff2') format('woff2');
+}
+
+
+@font-face {
+    font-family: 'Stem-Light';
+    src: local('Stem-Light'), url('stem-light.woff2') format('woff');
+}
+
+
+
+html{
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+
+
+.mainbg-content{
+    position: relative;
+    z-index: 2;
+}
+
+.wrapper{
+    max-width: 1414px;
+    margin: 0px auto;
+}
+
+@media (max-width: 1162px){
+    .wrapper{
+        margin: 0;
+        padding: 0 10px;
+    }
+}
+
+.logo-text{
+    font-family: Stem-Light;
+    font-size: 46px;
+    color: black;
+}
+
+.title-text{
+    font-family: Stem-Light;
+    font-size: 30px;
+    color: black;
+}
+
+.btn-head{
+    font-family: Stem;
+    font-size: 16px;
+    font-weight: 400;
+    border: solid 2px black;
+    border-radius: 12px;
+    padding: 9px 30px;
+}
+
+.card-bod{
+    border-radius: 12px;
+    border: solid 2px black;
+    padding: 5px 5px;
+    background-color: #E8E8E8;
+}
+
+
+.btn-galary{
+    background-color: white;
+    background-image: url("/img/gallery.png");
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+
+}
+
+.btn-live{
+    background-color: white;
+    background-image: url("/img/live.png");
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+
+}
+
+.btn-settings{
+    background-color: white;
+    background-image: url("/img/settings.png");
+    background-repeat: no-repeat;
+    border: 1px solid black;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+}
+
+
+.img-camera{
+    width: 180px;
+    height: 120px;
+    border-radius: 5px;
+    border: 2px solid black;
+    object-fit: cover;
+}
