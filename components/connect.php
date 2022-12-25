@@ -1,15 +1,32 @@
 <?php
-
-session_start();
+if(!isset($GLOBALS['_nosession']) || !$GLOBALS['_nosession'])
+    session_start();
 
 $v = 222;
 
-function createPdo(){
+function dbConnectData(){
     $_host = '172.20.3.231';
     $_user = 'ilya';
     $_password = 'Qwerty!23456';
     $_db = 'test';
-    return new PDO("mysql:host=$_host;dbname=$_db", $_user, $_password);
+    return [
+        'host'=>$_host,
+        'user'=>$_user,
+        'password'=>$_password,
+        'db'=>$_db,
+    ];
+}
+
+function createPdo(){
+    $connect = dbConnectData();
+    return new PDO("mysql:host={$connect['host']};dbname={$connect['db']}", $connect['user'], $connect['password']);
+
+
+}
+function createMysqli(){
+    $connect = dbConnectData();
+    return mysqli_connect($connect['host'], $connect['user'], $connect['password'], $connect['db']);
+
 }
 
 function prepareQuery($sql){
@@ -23,10 +40,20 @@ function executeQuery($sql, $params = []){
 }
 
 function queryFetchAll($sql, $params = []){
+
+
+
     $stmt = executeQuery($sql, $params);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function queryFetch($sql, $params = []){
+    //mysqli
+    $mysql = createMysqli();
+    $result = $mysql->query($sql);
+    $row = $result->fetch_assoc();
+    return $row;
+
+    //pdo
     $stmt = executeQuery($sql, $params);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
