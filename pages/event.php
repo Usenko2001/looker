@@ -1,8 +1,7 @@
 <div class="container my-3">
-  <div class="row">
-    <div class="col-md-6">
+  <div class="d-flex gap-2">
       <a href="/" class="btn btn-outline-secondary">Последние события</a>
-    </div>
+      <a href="/camera.php?id=<?= $event['camera_id']?>" class="btn btn-outline-secondary">Все события камеры #<?= $event['camera_id']?></a>
   </div>
 </div>
 <script>

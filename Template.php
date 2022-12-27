@@ -7,7 +7,9 @@ include $_SERVER['DOCUMENT_ROOT'] . '/components/connect.php';
 class Template{
 
   static function getTemplateFile($file){
-    return $_SERVER['DOCUMENT_ROOT'].'/'.trim($file, '/');
+      if(substr_compare($file, '.php', -strlen('.php')) !== 0)
+          $file .= '.php';
+      return $_SERVER['DOCUMENT_ROOT'].'/'.trim($file, '/');
   }
 
   public function __construct($page = null, $variables = [], $headerVariables = [], $footerVariables = [])
@@ -16,12 +18,17 @@ class Template{
       $this->render($page, $variables, $headerVariables, $footerVariables);
   }
 
-  private function renderTemplateFile($file, $variables = []){
-      $templateFile = self::getTemplateFile($file);
-      if (!file_exists($templateFile) || !is_file($templateFile))
+  private function component($_pageName, $variables = []){
+      $_pageName = '/components/'.trim($_pageName, '/');
+      $this->renderTemplateFile($_pageName, $variables);
+  }
+
+  private function renderTemplateFile($_pageName, $variables = []){
+      $_templateFile = self::getTemplateFile($_pageName);
+      if (!file_exists($_templateFile) || !is_file($_templateFile))
           return;
       extract($variables);
-      include $templateFile;
+      include $_templateFile;
   }
   private function renderPage($_pageName, $variables=[]){
 
