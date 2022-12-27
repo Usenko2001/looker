@@ -5,10 +5,10 @@ if(!isset($GLOBALS['_nosession']) || !$GLOBALS['_nosession'])
 $v = 222;
 
 function dbConnectData(){
-    $_host = '172.20.3.231';
-    $_user = 'ilya';
-    $_password = 'Qwerty!23456';
-    $_db = 'test';
+    $_host = '172.20.3.233';
+    $_user = 'ivanUser';
+    $_password = 'Qwerty!@#456';
+    $_db = 'vcontrol';
     return [
         'host'=>$_host,
         'user'=>$_user,
@@ -48,10 +48,10 @@ function queryFetchAll($sql, $params = []){
 }
 function queryFetch($sql, $params = []){
     //mysqli
-    $mysql = createMysqli();
-    $result = $mysql->query($sql);
-    $row = $result->fetch_assoc();
-    return $row;
+//    $mysql = createMysqli();
+//    $result = $mysql->query($sql);
+//    $row = $result->fetch_assoc();
+//    return $row;
 
     //pdo
     $stmt = executeQuery($sql, $params);

@@ -36,7 +36,6 @@
       Событие #<?= $id ?>
     </h5>
     <div>
-      Время загрузки: <?= $loading['time']?> сек
     </div>
     <div class="row g-2">
       <div class="col-md-4 text-start">
@@ -51,7 +50,7 @@
         <button class="btn btn-outline-secondary" id="btnNext" onclick="nextpage()">&gt;</button>
       </div>
       
-      <div class="col-12 col-md-8 offset-md-2">
+      <div class="col-12">
           <div id="eventImg" class="d-flex w-100 align-items-center justify-content-center my-4" data-event="<?=$id?>">
             <div class="error d-none">
               Ошибка!
