@@ -10,21 +10,21 @@ if(!$event){
 }
 
 $page = max(1, (int)($_GET['page'] ?? 1));
-$imagePageOffset = max(1, (int)($_GET['pageOffset'] ?? 1));
-$offset = ($page - 1) * $imagePageOffset;
+$perPage = max(1, (int)($_GET['perPage'] ?? 20));
+$offset = ($page - 1) * $perPage;
 
 $period = [];
 $period['start'] = microtime(true);
-//$image = queryFetch("SELECT * FROM eventImages WHERE event_id=$eventId LIMIT 1 OFFSET $offset", [$eventId]);
+$images = queryFetchAll("SELECT * FROM eventImages WHERE event_id=$eventId LIMIT $perPage OFFSET $offset", [$eventId]);
 $period['end'] = microtime(true);
 $period['time'] = $period['end'] - $period['start'];
 
 
 $count = queryFetch("SELECT COUNT(*) as aggregate FROM eventImages WHERE event_id=?", [$eventId])['aggregate'];
-$totalPages = ceil($count / $imagePageOffset);
+$totalPages = ceil($count / $perPage);
 
-$template->render('event', ['image'=>$image ?? '', 'event'=>$event,
-    'id'=>$eventId, 'page'=>$page, 'totalPages'=>$totalPages, 'loading'=>$period],
+$template->render('event', ['images'=>$images ?? '', 'event'=>$event,
+    'id'=>$eventId, 'perPage'=>$perPage, 'page'=>$page, 'totalPages'=>$totalPages, 'loading'=>$period],
 
     ['title'=>"Event #$eventId"]);
 

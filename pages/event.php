@@ -4,31 +4,6 @@
       <a href="/camera.php?id=<?= $event['camera_id']?>" class="btn btn-outline-secondary">Все события камеры #<?= $event['camera_id']?></a>
   </div>
 </div>
-<script>
-  let currentpage = 1;
-  const maxpage = <?= $totalPages ?>;
-  function checkDisableBtn(){
-      let btnNext = $('#btnNext');
-      btnNext.attr('disabled', currentpage >= maxpage);
-
-      let btnPrev = $('#btnPrev');
-      btnPrev.attr('disabled', currentpage === 1);
-  }
-  function nextpage(){
-      currentpage+=1;
-      currentpage = Math.min(maxpage, currentpage)
-      checkDisableBtn();
-
-      loadImage('eventImg', currentpage);
-  }
-  function prevpage(){
-      currentpage-=1;
-      currentpage = Math.max(1, currentpage)
-      checkDisableBtn();
-
-      loadImage('eventImg', currentpage);
-  }
-</script>
 
 <div class="container my-3">
     <h5>
@@ -37,37 +12,53 @@
     <div>
     </div>
     <div class="row g-2">
-      <div class="col-md-4 text-start">
-        <button class="btn btn-outline-secondary" id="btnPrev" onclick="prevpage()">&lt;</button>
-      </div>
-      <div class="col-md-4 text-center">
-<!--        --><?php //if($page > 1) { ?>
-<!--          <a href="/event.php?id=--><?//=$id?><!--" class="btn btn-outline-secondary">В начало</a>-->
-<!--        --><?php //} ?>
-      </div>
-      <div class="col-md-4 text-end">
-        <button class="btn btn-outline-secondary" id="btnNext" onclick="nextpage()">&gt;</button>
-      </div>
+        <div class=" col-12">
+            <?php if($totalPages > 1) { ?>
+                <div class="my-3">
+                    <?php $this->component('paginator', ['page'=>'/event.php', 'id'=>$id, 'p'=>$page, 'tp'=>$totalPages]) ?>
+                </div>
+            <?php } ?>
+        </div>
       
-      <div class="col-12">
-          <div id="eventImg" class="d-flex w-100 align-items-center justify-content-center my-4" data-event="<?=$id?>">
-            <div class="error d-none">
-              Ошибка!
-            </div>
-            <img src="#" alt="" class="w-100 d-none " style="object-fit: contain">
-            <div class="spinner-border text-secondary text-center" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
+        <div class="col-12">
+            <div id="carouselExampleControls" class="carousel slide" data-bs-interval="3600000" data-bs-ride="true"  data-bs-touch="false">
 
-      </div>
-      
+                <?php $first = true;$num = 0;?>
+                <div class="carousel-indicators">
+                    <?php foreach ($images as $img) { ?>
+                        <button type="button" data-bs-target="#carouselExampleControls" data-bs-slide-to="<?= $num ?>"
+                              <?php if($first){ ?> class="active" aria-current="true" <?php } ?>
+
+                              aria-label="Slide <?= $num ?>"></button>
+                    <?php ; $first = false;$num++;} ?>
+                </div>
+                <?php $first = true;$num = 0;?>
+                <div class="carousel-inner">
+                    <?php foreach ($images as $img) { ?>
+                        <div class="carousel-item <?= $first ? 'active' : '' ?>">
+                            <img src="data:image/jpeg;base64,<?=$img['image']?>" class="d-block w-100" alt="...">
+                        </div>
+                    <?php ; $first = false; $num++;} ?>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+        </div>
+
+
+        <div class=" col-12">
+            <?php if($totalPages > 1) { ?>
+                <div class="my-3">
+                    <?php $this->component('paginator', ['page'=>'/event.php', 'id'=>$id, 'p'=>$page, 'tp'=>$totalPages]) ?>
+                </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
-
-<script>
-    $( document ).ready(()=>{
-        checkDisableBtn();
-        loadImage('eventImg')
-    })
-</script>

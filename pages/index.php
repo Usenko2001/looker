@@ -78,11 +78,11 @@
                 Время: <?= $event['time'] ?>
               </div>
               <div class="text-center">
-                <?php if($event['image'] ?? null){ ?>
-                  <img src="data:image/jpeg;base64,<?= $event['image']?>"class="w-100" style="object-fit: cover">
-                <?php } else { ?>
-                    Ошибка при загрузке изображения
-                <?php }?>
+<!--                --><?php //if($event['image'] ?? null){ ?>
+<!--                  <img src="data:image/jpeg;base64,--><?//= $event['image']?><!--"class="w-100" style="object-fit: cover">-->
+<!--                --><?php //} else { ?>
+<!--                    Ошибка при загрузке изображения-->
+<!--                --><?php //}?>
               </div>
             </a>
           </div>

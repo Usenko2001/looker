@@ -4,7 +4,7 @@
             &lt;
         </div>
     <?php } else {?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p - 1?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p - 1?>"
            class="border rounded-2 p-2 d-block text-decoration-none">&lt;</a>
     <?php } ?>
 
@@ -13,17 +13,17 @@
             1
         </div>
     <?php } else {?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=1"
+        <a href="<?= $page ?>?id=<?= $id?>&page=1"
            class="border rounded-2 p-2 d-block text-decoration-none">1</a>
     <?php } ?>
 
 
     <?php if($p == 3){?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p - 1 ?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p - 1 ?>"
            class="border rounded-2 p-2 d-block text-decoration-none"><?= $p - 1 ?></a>
     <?php } else if($p > 3) {?>
         <div class="border rounded-2 p-2 text-muted">...</div>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p - 1 ?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p - 1 ?>"
            class="border rounded-2 p-2 d-block text-decoration-none"><?= $p - 1 ?></a>
     <?php } ?>
 
@@ -35,12 +35,12 @@
 
 
     <?php if($p <  $tp - 2) {?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p + 1 ?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p + 1 ?>"
            class="border rounded-2 p-2 d-block text-decoration-none"><?= $p + 1 ?></a>
     <?php } ?>
 
     <?php if($p == $tp-2){?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p + 1 ?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p + 1 ?>"
            class="border rounded-2 p-2 d-block text-decoration-none"><?= $p + 1 ?></a>
     <?php } ?>
     <?php if($p < $tp-2){?>
@@ -50,7 +50,7 @@
     <?php if($p == $tp){?>
         <div class="border rounded-2 p-2 text-dark border-dark"><?= $p ?></div>
     <?php } else {?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $tp ?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $tp ?>"
            class="border rounded-2 p-2 d-block text-decoration-none"><?= $tp ?></a>
     <?php } ?>
 
@@ -59,7 +59,7 @@
             &gt;
         </div>
     <?php } else {?>
-        <a href="/camera.php?id=<?= $cameraId?>&page=<?= $p + 1?>"
+        <a href="<?= $page ?>?id=<?= $id?>&page=<?= $p + 1?>"
            class="border rounded-2 p-2 d-block text-decoration-none">&gt;</a>
     <?php } ?>
 
