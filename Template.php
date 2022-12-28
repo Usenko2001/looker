@@ -32,26 +32,38 @@ class Template{
   }
   private function renderPage($_pageName, $variables=[]){
 
-      if(substr_compare($_pageName, '.php', -strlen('.php')) !== 0)
-          $_pageName .= '.php';
-      $_pageName = $_SERVER['DOCUMENT_ROOT'].'/pages/'.trim($_pageName, '/');
-      $notFoundPage = $_SERVER['DOCUMENT_ROOT'] . '/pages/not_found.php';
-      if (!isset($_pageName))
-          $_pageName = $notFoundPage;
-      if (!file_exists($_pageName) || !is_file($_pageName))
-          $_pageName = $notFoundPage;
-      extract($variables);
-      include $_pageName;
+      try {
+          if (substr_compare($_pageName, '.php', -strlen('.php')) !== 0)
+              $_pageName .= '.php';
+          $_pageName = $_SERVER['DOCUMENT_ROOT'] . '/pages/' . trim($_pageName, '/');
+          $notFoundPage = $_SERVER['DOCUMENT_ROOT'] . '/pages/not_found.php';
+          if (!isset($_pageName))
+              $_pageName = $notFoundPage;
+          if (!file_exists($_pageName) || !is_file($_pageName))
+              $_pageName = $notFoundPage;
+          extract($variables);
+          include $_pageName;
+      } catch (Throwable $ex){
+          throw $ex;
+      }
   }
 
   function render($page, $variables = [], $headerVariables = [], $footerVariables = [])
   {
-      echo "<!doctype><html>";
-      $this->renderTemplateFile('/components/htmlHeader.php', $headerVariables);
-      echo "<body>";
-      $this->renderPage($page,$variables);
-      $this->renderTemplateFile('/components/htmlFooter.php', $footerVariables);
-      echo "</body>";
-      echo "</html>";
+      try {
+          ob_start();
+          echo "<!doctype><html>";
+          $this->renderTemplateFile('/components/htmlHeader.php', $headerVariables);
+          echo  "<body>";
+          $this->renderPage($page,$variables);
+          $this->renderTemplateFile('/components/htmlFooter.php', $footerVariables);
+          echo  "</body>";
+          echo  "</html>";
+          $result = ob_get_clean();
+          echo $result;
+      } catch (Throwable  $ex){
+          $this->render('error', ['ex'=>$ex]);
+      }
+
   }
 }

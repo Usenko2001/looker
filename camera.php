@@ -19,19 +19,8 @@ $pagination = [
     'totalPages'=>$pages,
 ];
 
-$eventIds = [];
-foreach ($events as $e){$eventIds[] = $e['id'];}
-$eventIds = join(',', $eventIds);
-$images = queryFetchAll("SELECT * FROM eventImages WHERE event_id IN ($eventIds) GROUP BY event_id;");
-foreach ($events as $i=>$event){
-    foreach ($images as $img){
-        if($event['id'] == $img['event_id']){
-            $event['image'] = $img['image'] ?? null;
-            $events[$i] = $event;
-            break;
-        }
-    }
-}
+makeThumbnailsForEventList($events);
+
 
 $template->render('camera', ['cameraId'=>$cameraId, 'events'=>$events,'pagination'=>$pagination], ['title'=>"Камера #$cameraId"]);
 
