@@ -13,15 +13,20 @@
 <!--      <div class="col-md-12">-->
 <!--        Загрузка страницы: --><?//= $loadTime ?><!-- сек.-->
 <!--      </div>-->
-        <div class="col-md-12">
-<!--                    <button class="btn-head">-->
-<!--                        параметры-->
-<!--                    </button>-->
-
-            <a href="/" class="btn btn-outline-secondary">
+        <div class="col-md-4">
+            <a href="/" class="btn btn-outline-secondary me-2">
                 обновить
             </a>
         </div>
+        <?php if($neededCache){ ?>
+            <div class="col-md-4">
+                <a href="/?cache_new=1" class="btn btn-outline-secondary me-2">
+                    обновить с кэшированием
+                </a>
+                <div class="text-muted" style="font-size: 12px">Может занять долгое время, обычно обновляется
+                    автоматически в пределах пары минут</div>
+            </div>
+        <?php } ?>
     </div>
 </div>
 

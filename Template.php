@@ -1,7 +1,7 @@
 <?php
 
 
-include $_SERVER['DOCUMENT_ROOT'] . '/components/connect.php';
+include 'connect.php';
 
 
 class Template{

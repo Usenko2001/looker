@@ -12,13 +12,17 @@ $events2 = queryFetchAll("SELECT * FROM event WHERE camera_id=8 and
 
 $allEvents = array_merge($events1, $events2);
 
-makeThumbnailsForEventList($allEvents);
+if(isset($_GET['cache_new']) && $_GET['cache_new'])
+    makeThumbnailsForEventList($events1);
+
+$neededCache = count(eventIdListForThumbnail($events1)) > 0;
 
 $end = microtime(true);
 $loadTime = round( $end - $start, 3);
 
 
-$template->render('index', ['events1'=>$events1, 'events2'=>$events2, 'loadTime'=>$loadTime], ['title'=>'Main page']);
+$template->render('index', ['events1'=>$events1, 'events2'=>$events2, 'loadTime'=>$loadTime,
+    'neededCache'=>$neededCache], ['title'=>'Main page']);
 
 ?>
 

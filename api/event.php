@@ -1,6 +1,6 @@
 <?php
 $GLOBALS['_nosession'] = true;
-include '../components/connect.php';
+include __DIR__.'/../connect.php';
 header('Content-Type: application/json');
 
 $id = (int)($_GET['id'] ?? 0);

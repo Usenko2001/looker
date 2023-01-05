@@ -57,13 +57,23 @@ function queryFetch($sql, $params = []){
     $stmt = executeQuery($sql, $params);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+function path($path){
+    if(isset($_SERVER) && isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER["DOCUMENT_ROOT"]) {
+        $pathRoot = $_SERVER['DOCUMENT_ROOT'];
+    }
+    else
+        $pathRoot = __DIR__;
+    return $pathRoot . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR);
+}
 
 function make_thumb($img, $dir, $name, $desired_width) {
 
     /* read the source image */
-    $tmp = $_SERVER['DOCUMENT_ROOT'].'/img/thumb/tmp.jpg';
+    $tmp = path('/img/thumb/tmp.jpg');
     file_put_contents($tmp, base64_decode($img), LOCK_EX);
-    chmod($tmp, 0666);
+    try {
+//        chmod($tmp, 0666);
+    }catch (Exception $e){}
 
     $source_image = imagecreatefromjpeg($tmp);
     $width = imagesx($source_image);
@@ -82,16 +92,22 @@ function make_thumb($img, $dir, $name, $desired_width) {
         $localdir = '/img/thumb/'. trim($dir, '/');
     else
         $localdir = '/img/thumb';
-    $dir = $_SERVER['DOCUMENT_ROOT'].$localdir;
+    $dir = path($localdir);
+
     mkdir($dir);
-    chmod($dir, 0777);
+    try {
+        chmod($dir, 0777);
+    }catch (Exception $e){}
 
     /* create the physical thumbnail image to its destination */
     $name = trim($name, '/');
     $path = $localdir.'/'.$name;
     $dest = $dir.'/'.$name;
     imagejpeg($virtual_image, $dest);
-    chmod($dest, 0666);
+    try {
+        chmod($dest, 0666);
+    }catch (Exception $e){}
+
     return $path;
 }
 
@@ -101,25 +117,29 @@ function makeEventThumb($img, $eventId, $desiredWidth = 300){
 
 function eventThumbnailExists($eventId){
     $local = '/img/thumb/event_'.$eventId.'/thumb.jpg';
-    $file = $_SERVER['DOCUMENT_ROOT'].$local;
+    $file = path($local);
     return file_exists($file);
 }
 function getThumbImageForEvent($eventId, $img = null){
     $local = '/img/thumb/event_'.$eventId.'/thumb.jpg';
-    $file = $_SERVER['DOCUMENT_ROOT'].$local;
+    $file = path($local);
     if(file_exists($file))
         return $local;
     if($img)
         return 'data:image/jpeg;base64,'.$img;
     return false;
 }
-
-function makeThumbnailsForEventList($events){
+function eventIdListForThumbnail($events){
     $eventIds = [];
     foreach ($events as $e){
         if(!eventThumbnailExists($e['id']))
             $eventIds[] = $e['id'];
     }
+    return $eventIds;
+}
+
+function makeThumbnailsForEventList($events){
+    $eventIds = eventIdListForThumbnail($events);
     $eventIds = join(',', $eventIds);
     $images = queryFetchAll("SELECT * FROM eventImages WHERE event_id IN ($eventIds) GROUP BY event_id;");
     foreach ($images as $img){
@@ -128,3 +148,7 @@ function makeThumbnailsForEventList($events){
     }
 }
 
+function log_message($message){
+    $message = "[" . date("Y-m-d H:i:s") . "] " . $message . PHP_EOL;
+    file_put_contents(path('looker.log'), $message, FILE_APPEND);
+}
