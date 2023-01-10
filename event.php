@@ -9,22 +9,26 @@ if(!$event){
     return;
 }
 
-$page = max(1, (int)($_GET['page'] ?? 1));
-$perPage = max(1, (int)($_GET['perPage'] ?? 20));
-$offset = ($page - 1) * $perPage;
+$dir = "/img/thumb/event_$eventId";
 
-$period = [];
-$period['start'] = microtime(true);
-$images = queryFetchAll("SELECT * FROM eventImages WHERE event_id=$eventId LIMIT $perPage OFFSET $offset", [$eventId]);
-$period['end'] = microtime(true);
-$period['time'] = $period['end'] - $period['start'];
+$images = [];
+$files = null;
+if(file_exists(path($dir)))
+    $files = scandir(path($dir));
+if($files && count($files) > 1){
+    foreach ($files as $file){
+        $fname = basename($file);
+        $id = preg_replace("/[^\d]+/", '', $fname);
+
+        if($fname == 'thumb.jpg' || $fname =='.' || $fname == '..')
+            continue;
+        $images[$id] = $dir.DIRECTORY_SEPARATOR.$fname;
+    }
+}
 
 
-$count = queryFetch("SELECT COUNT(*) as aggregate FROM eventImages WHERE event_id=?", [$eventId])['aggregate'];
-$totalPages = ceil($count / $perPage);
-
-$template->render('event', ['images'=>$images ?? '', 'event'=>$event,
-    'id'=>$eventId, 'perPage'=>$perPage, 'page'=>$page, 'totalPages'=>$totalPages, 'loading'=>$period],
+$template->render('event', ['images'=>$images, 'event'=>$event,
+    'id'=>$eventId],
 
     ['title'=>"Event #$eventId"]);
 

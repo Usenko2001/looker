@@ -63,7 +63,7 @@ function path($path){
     }
     else
         $pathRoot = __DIR__;
-    return $pathRoot . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR);
+    return rtrim($pathRoot, DIRECTORY_SEPARATOR.'/\\') . DIRECTORY_SEPARATOR . trim($path, DIRECTORY_SEPARATOR."\\/");
 }
 
 function make_thumb($img, $dir, $name, $desired_width) {
@@ -94,10 +94,14 @@ function make_thumb($img, $dir, $name, $desired_width) {
         $localdir = '/img/thumb';
     $dir = path($localdir);
 
-    mkdir($dir);
-    try {
-        chmod($dir, 0777);
-    }catch (Exception $e){}
+    if(!file_exists($dir)) {
+        try {
+            mkdir($dir);
+            chmod($dir, 0777);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
 
     /* create the physical thumbnail image to its destination */
     $name = trim($name, '/');
@@ -117,6 +121,11 @@ function makeEventThumb($img, $eventId, $desiredWidth = 300){
 
 function eventThumbnailExists($eventId){
     $local = '/img/thumb/event_'.$eventId.'/thumb.jpg';
+    $file = path($local);
+    return file_exists($file);
+}
+function eventImageThumbnailExists($eventId, $imageId){
+    $local = '/img/thumb/event_'.$eventId.'/image-'.$imageId.'.jpg';
     $file = path($local);
     return file_exists($file);
 }
@@ -141,7 +150,13 @@ function eventIdListForThumbnail($events){
 function makeThumbnailsForEventList($events){
     $eventIds = eventIdListForThumbnail($events);
     $eventIds = join(',', $eventIds);
-    $images = queryFetchAll("SELECT * FROM eventImages WHERE event_id IN ($eventIds) GROUP BY event_id;");
+    $imagesIds = queryFetchAll("SELECT id FROM eventImages WHERE event_id IN ($eventIds) GROUP BY event_id;");
+    $ids = [];
+    foreach ($imagesIds as $iId){
+        $ids[] = $iId['id'];
+    }
+    $ids = join(',', $ids);
+    $images = queryFetchAll("SELECT * FROM eventImages where id in ($ids)");
     foreach ($images as $img){
         if($img['image'])
             makeEventThumb($img['image'], $img['event_id']);

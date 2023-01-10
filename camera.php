@@ -19,7 +19,8 @@ $pagination = [
     'totalPages'=>$pages,
 ];
 
-makeThumbnailsForEventList($events);
+if(isset($_GET['cache_new']) && $_GET['cache_new'])
+    makeThumbnailsForEventList($events);
 
 
 $template->render('camera', ['cameraId'=>$cameraId, 'events'=>$events,'pagination'=>$pagination], ['title'=>"Камера #$cameraId"]);
